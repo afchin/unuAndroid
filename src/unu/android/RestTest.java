@@ -7,10 +7,5 @@ import org.json.JSONException;
  
 import unu.android.RestClient;
 
-import static org.junit.Assert.assertTrue;
-
 public class RestTest {
-	public void testClientGet(){
-		
-	}
 }
