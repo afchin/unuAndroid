@@ -25,8 +25,14 @@ public final class R {
         public static final int quilt_icon=0x7f02000b;
         public static final int quilt_icon_hover=0x7f02000c;
     }
+    public static final class id {
+        public static final int realtabcontent=0x01010000;
+    }
     public static final class layout {
-        public static final int main=0x7f030000;
+        public static final int inbox_frag_layout=0x7f030000;
+        public static final int main=0x7f030001;
+        public static final int patches_frag_layout=0x7f030002;
+        public static final int tabs_layout=0x7f030003;
     }
     public static final class string {
         public static final int app_name=0x7f040001;

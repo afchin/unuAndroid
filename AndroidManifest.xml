@@ -22,10 +22,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".InboxActivity"></activity>
-        <activity android:name=".PatchesActivity"></activity>
-        <activity android:name=".QuiltsActivity"></activity>
-        <activity android:name=".BasketActivity"></activity>
     </application>
 
 </manifest>

@@ -1,55 +1,135 @@
 package unu.android;
 
-import android.app.Activity;
-import android.app.TabActivity;
-import android.content.Intent;
+import java.util.HashMap;
+
+import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TabHost;
-import android.widget.TextView;
+import android.widget.TabHost.TabContentFactory;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 
-@SuppressWarnings("deprecation")
-public class UnuActivity extends TabActivity {
-
-  public void onCreate(Bundle savedInstanceState){
+public class UnuActivity extends FragmentActivity implements TabHost.OnTabChangeListener{
+  private TabHost mTabHost;
+  private HashMap mapTabInfo = new HashMap();
+  private TabInfo mLastTab = null;
+  
+  private class TabInfo {
+    private String tag; 
+    private Class clss;
+    private Bundle args;
+    private Fragment fragment;
+    TabInfo(String tag, Class clss, Bundle args){
+      this.tag = tag;
+      this.clss = clss;
+      this.args = args;
+    }
+  }
+  
+  class TabFactory implements TabContentFactory {
+    private final Context mContext;
+    
+    public TabFactory(Context context){
+      mContext = context;
+    }
+    
+    public View createTabContent(String tag){
+      View v = new View(mContext);
+      v.setMinimumHeight(0);
+      v.setMinimumWidth(0);
+      return v;
+    }
+  }
+  
+  protected void onCreate(Bundle savedInstanceState){
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.main);
-
-    Resources res = getResources(); // Resource object to get Drawables
-    TabHost tabHost = getTabHost();  // The activity TabHost
-    TabHost.TabSpec spec;  // Resusable TabSpec for each tab
-    Intent intent;  // Reusable Intent for each tab
-
-    // Create an Intent to launch an Activity for the tab (to be reused)
-    intent = new Intent().setClass(this, InboxActivity.class);
-
-    // Initialize a TabSpec for each tab and add it to the TabHost
-    spec = tabHost.newTabSpec("Inbox").setIndicator("",
-        res.getDrawable(R.drawable.ic_tab_inbox))
-        .setContent(intent);
-    tabHost.addTab(spec);
-
-    // Do the same for the other tabs
-    intent = new Intent().setClass(this, PatchesActivity.class);
-    spec = tabHost.newTabSpec("Patches").setIndicator("",
-        res.getDrawable(R.drawable.ic_tab_patches))
-        .setContent(intent);
-    tabHost.addTab(spec);
     
-    // Do the same for the other tabs
-    intent = new Intent().setClass(this, QuiltsActivity.class);
-    spec = tabHost.newTabSpec("Quilts").setIndicator("",
-        res.getDrawable(R.drawable.ic_tab_quilts))
-        .setContent(intent);
-    tabHost.addTab(spec);
+    setContentView(R.layout.tabs_layout);
     
-    // Do the same for the other tabs
-    intent = new Intent().setClass(this, BasketActivity.class);
-    spec = tabHost.newTabSpec("Basket").setIndicator("",
-        res.getDrawable(R.drawable.ic_tab_basket))
-        .setContent(intent);
-    tabHost.addTab(spec);
-
-    tabHost.setCurrentTab(0);
+    initializeTabHost(savedInstanceState);
+    if (savedInstanceState != null){
+      mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab"));
+    }
+  }
+  
+  protected void onSaveInstanceState(Bundle outState){
+    outState.putString("tab", mTabHost.getCurrentTabTag());
+    super.onSaveInstanceState(outState);
+  }
+  
+  private void initializeTabHost(Bundle args){
+    mTabHost = (TabHost)findViewById(android.R.id.tabhost);
+    mTabHost.setup();
+    TabInfo tabInfo = null;
+    Resources res = getResources();
+    UnuActivity.addTab(this, this.mTabHost,
+        this.mTabHost.newTabSpec("Inbox").setIndicator("",
+            res.getDrawable(R.drawable.ic_tab_inbox)),
+        (tabInfo = new TabInfo("Inbox", InboxFragment.class, args)));
+    this.mapTabInfo.put(tabInfo.tag, tabInfo);
+    
+    UnuActivity.addTab(this, this.mTabHost,
+        this.mTabHost.newTabSpec("Patches").setIndicator("",
+            res.getDrawable(R.drawable.ic_tab_patches)),
+        (tabInfo = new TabInfo("Patches", PatchesFragment.class, args)));
+    this.mapTabInfo.put(tabInfo.tag, tabInfo);
+    
+    UnuActivity.addTab(this, this.mTabHost,
+        this.mTabHost.newTabSpec("Quilts").setIndicator("",
+            res.getDrawable(R.drawable.ic_tab_quilts)),
+        (tabInfo = new TabInfo("Quilts", QuiltsFragment.class, args)));
+    this.mapTabInfo.put(tabInfo.tag, tabInfo);
+    
+    UnuActivity.addTab(this, this.mTabHost,
+        this.mTabHost.newTabSpec("Basket").setIndicator("",
+            res.getDrawable(R.drawable.ic_tab_basket)),
+        (tabInfo = new TabInfo("Basket", BasketFragment.class, args)));
+    this.mapTabInfo.put(tabInfo.tag, tabInfo);
+    
+    this.onTabChanged("Inbox");
+    mTabHost.setOnTabChangedListener(this);
+  }
+  
+  private static void addTab(UnuActivity activity, TabHost tabHost,
+      TabHost.TabSpec tabSpec, TabInfo tabInfo){
+    tabSpec.setContent(activity.new TabFactory(activity));
+    String tag = tabSpec.getTag();
+    
+    tabInfo.fragment = activity.getSupportFragmentManager().findFragmentByTag(tag);
+    if (tabInfo.fragment != null && !tabInfo.fragment.isDetached()){
+      FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction();
+      ft.detach(tabInfo.fragment);
+      ft.commit();
+      activity.getSupportFragmentManager().executePendingTransactions();
+    }
+    
+    tabHost.addTab(tabSpec);
+  }
+  
+  public void onTabChanged(String tag){
+    TabInfo newTab = (TabInfo) this.mapTabInfo.get(tag);
+    if (mLastTab != newTab) {
+      FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
+      if (mLastTab != null){
+        if (mLastTab.fragment != null){
+          ft.detach(mLastTab.fragment);
+        }
+      }
+      if (newTab != null) {
+        if (newTab.fragment == null){
+          newTab.fragment = Fragment.instantiate(this,
+              newTab.clss.getName(), newTab.args);
+          ft.add(R.id.realtabcontent, newTab.fragment, newTab.tag);
+        } else {
+          ft.attach(newTab.fragment);
+        }
+      }
+      mLastTab = newTab;
+      ft.commit();
+      this.getSupportFragmentManager().executePendingTransactions();
+    }
   }
 }
