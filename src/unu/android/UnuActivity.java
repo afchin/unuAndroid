@@ -24,28 +24,28 @@ public class UnuActivity extends TabActivity {
     intent = new Intent().setClass(this, InboxActivity.class);
 
     // Initialize a TabSpec for each tab and add it to the TabHost
-    spec = tabHost.newTabSpec("Inbox").setIndicator("Inbox",
+    spec = tabHost.newTabSpec("Inbox").setIndicator("",
         res.getDrawable(R.drawable.ic_tab_inbox))
         .setContent(intent);
     tabHost.addTab(spec);
 
     // Do the same for the other tabs
     intent = new Intent().setClass(this, PatchesActivity.class);
-    spec = tabHost.newTabSpec("Patches").setIndicator("Patches",
+    spec = tabHost.newTabSpec("Patches").setIndicator("",
         res.getDrawable(R.drawable.ic_tab_patches))
         .setContent(intent);
     tabHost.addTab(spec);
     
     // Do the same for the other tabs
     intent = new Intent().setClass(this, QuiltsActivity.class);
-    spec = tabHost.newTabSpec("Quilts").setIndicator("Quilts",
+    spec = tabHost.newTabSpec("Quilts").setIndicator("",
         res.getDrawable(R.drawable.ic_tab_quilts))
         .setContent(intent);
     tabHost.addTab(spec);
     
     // Do the same for the other tabs
     intent = new Intent().setClass(this, BasketActivity.class);
-    spec = tabHost.newTabSpec("Basket").setIndicator("Basket",
+    spec = tabHost.newTabSpec("Basket").setIndicator("",
         res.getDrawable(R.drawable.ic_tab_basket))
         .setContent(intent);
     tabHost.addTab(spec);
