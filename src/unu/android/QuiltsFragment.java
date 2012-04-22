@@ -16,7 +16,7 @@ public class QuiltsFragment extends Fragment {
     if (container == null){
       return null;
     } else {
-      return (LinearLayout)inflater.inflate(R.layout.patches_frag_layout, container, false);
+      return (LinearLayout)inflater.inflate(R.layout.quilts_frag_layout, container, false);
     }
   }
 }
