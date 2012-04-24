@@ -16,15 +16,23 @@ import android.webkit.WebSettings.PluginState;
 import android.webkit.WebView;
 
 
-public class ImageFragment extends Fragment {
+public class ContentViewerFragment extends Fragment {
 
   private ViewPagerAdapter mAdapter;
   private ViewPager mPager;
   private View currView;
-  ArrayList<String> embeds = new ArrayList<String>();
+  ArrayList<String> embeds;
 
-  public ImageFragment(ArrayList<String> embeds){
+  public ContentViewerFragment(){
+    this.embeds = new ArrayList<String>();
+  }
+  
+  public ContentViewerFragment(ArrayList<String> embeds){
     this.embeds = embeds;
+  }
+  
+  public void addEmbed(String newEmbed){
+    this.embeds.add(newEmbed);
   }
   
   @Override
@@ -32,7 +40,7 @@ public class ImageFragment extends Fragment {
       Bundle savedInstanceState) {
 
     super.onCreate(savedInstanceState);
-    currView = inflater.inflate(R.layout.inbox_frag_layout, container, false);
+    currView = inflater.inflate(R.layout.contentviewer_frag_layout, container, false);
 
     this.mAdapter  = new ViewPagerAdapter(getActivity(), embeds);
     mPager = (ViewPager)currView.findViewById(R.id.viewpager);

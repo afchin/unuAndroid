@@ -32,13 +32,14 @@ public final class R {
         public static final int webView=0x7f050000;
     }
     public static final class layout {
-        public static final int img_frag_layout=0x7f030000;
-        public static final int inbox_frag_layout=0x7f030001;
-        public static final int main=0x7f030002;
-        public static final int patches_frag_layout=0x7f030003;
-        public static final int quilts_frag_layout=0x7f030004;
-        public static final int tabs_layout=0x7f030005;
-        public static final int web_frag_layout=0x7f030006;
+        public static final int contentviewer_frag_layout=0x7f030000;
+        public static final int img_frag_layout=0x7f030001;
+        public static final int inbox_frag_layout=0x7f030002;
+        public static final int main=0x7f030003;
+        public static final int patches_frag_layout=0x7f030004;
+        public static final int quilts_frag_layout=0x7f030005;
+        public static final int tabs_layout=0x7f030006;
+        public static final int web_frag_layout=0x7f030007;
     }
     public static final class string {
         public static final int app_name=0x7f040001;
