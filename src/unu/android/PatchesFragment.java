@@ -1,7 +1,11 @@
 package unu.android;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +39,16 @@ public class PatchesFragment extends ListFragment {
 
   @Override
   public void onListItemClick(ListView l, View v, int position, long id) {
+    
+    ArrayList<String> embeds = new ArrayList<String>();
+    embeds.add("<img src = \"http://i.imgur.com/Svphn.jpg\" >");
+    Fragment newFragment = new ContentViewerFragment(embeds);
+    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+    
+    transaction.replace(R.id.realtabcontent, newFragment);
+    transaction.addToBackStack(this.getClass().toString());
+    transaction.commit();
+    
 //    String item = (String) getListAdapter().getItem(position);
 //    DetailFragment fragment = (DetailFragment) getFragmentManager()
 //        .findFragmentById(R.id.detailFragment);
