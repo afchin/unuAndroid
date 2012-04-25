@@ -93,7 +93,7 @@ public class UnuActivity extends FragmentActivity implements TabHost.OnTabChange
 	}
 
 	public void onTabChanged(String tag){
-		TabInfo newTab = (TabInfo) this.mapTabInfo.get(tag);
+		TabInfo newTab = this.mapTabInfo.get(tag);
 		if (mLastTab != newTab) {
 			FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
 			if (mLastTab != null){
