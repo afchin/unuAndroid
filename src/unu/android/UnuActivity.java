@@ -3,7 +3,6 @@ package unu.android;
 import java.util.HashMap;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TabHost;
@@ -12,124 +11,108 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 
-public class UnuActivity extends FragmentActivity implements TabHost.OnTabChangeListener{
-  private TabHost mTabHost;
-  private HashMap mapTabInfo = new HashMap();
-  private TabInfo mLastTab = null;
-  
-  private class TabInfo {
-    private String tag; 
-    private Class clss;
-    private Bundle args;
-    private Fragment fragment;
-    TabInfo(String tag, Class clss, Bundle args){
-      this.tag = tag;
-      this.clss = clss;
-      this.args = args;
-    }
-  }
-  
-  class TabFactory implements TabContentFactory {
-    private final Context mContext;
-    
-    public TabFactory(Context context){
-      mContext = context;
-    }
-    
-    public View createTabContent(String tag){
-      View v = new View(mContext);
-      v.setMinimumHeight(0);
-      v.setMinimumWidth(0);
-      return v;
-    }
-  }
-  
-  protected void onCreate(Bundle savedInstanceState){
-    super.onCreate(savedInstanceState);
-    
-    setContentView(R.layout.tabs_layout);
-    
-    initializeTabHost(savedInstanceState);
-    if (savedInstanceState != null){
-      mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab"));
-    }
-  }
-  
-  protected void onSaveInstanceState(Bundle outState){
-    outState.putString("tab", mTabHost.getCurrentTabTag());
-    super.onSaveInstanceState(outState);
-  }
-  
-  private void initializeTabHost(Bundle args){
-    mTabHost = (TabHost)findViewById(android.R.id.tabhost);
-    mTabHost.setup();
-    TabInfo tabInfo = null;
-    Resources res = getResources();
-    UnuActivity.addTab(this, this.mTabHost,
-        this.mTabHost.newTabSpec("Inbox").setIndicator("",
-            res.getDrawable(R.drawable.ic_tab_inbox)),
-        (tabInfo = new TabInfo("Inbox", InboxFragment.class, args)));
-    this.mapTabInfo.put(tabInfo.tag, tabInfo);
-    
-    UnuActivity.addTab(this, this.mTabHost,
-        this.mTabHost.newTabSpec("Patches").setIndicator("",
-            res.getDrawable(R.drawable.ic_tab_patches)),
-        (tabInfo = new TabInfo("Patches", PatchesFragment.class, args)));
-    this.mapTabInfo.put(tabInfo.tag, tabInfo);
-    
-    UnuActivity.addTab(this, this.mTabHost,
-        this.mTabHost.newTabSpec("Quilts").setIndicator("",
-            res.getDrawable(R.drawable.ic_tab_quilts)),
-        (tabInfo = new TabInfo("Quilts", QuiltsFragment.class, args)));
-    this.mapTabInfo.put(tabInfo.tag, tabInfo);
-    
-    UnuActivity.addTab(this, this.mTabHost,
-        this.mTabHost.newTabSpec("Basket").setIndicator("",
-            res.getDrawable(R.drawable.ic_tab_basket)),
-        (tabInfo = new TabInfo("Basket", BasketFragment.class, args)));
-    this.mapTabInfo.put(tabInfo.tag, tabInfo);
-    
-    this.onTabChanged("Inbox");
-    mTabHost.setOnTabChangedListener(this);
-  }
-  
-  private static void addTab(UnuActivity activity, TabHost tabHost,
-      TabHost.TabSpec tabSpec, TabInfo tabInfo){
-    tabSpec.setContent(activity.new TabFactory(activity));
-    String tag = tabSpec.getTag();
-    
-    tabInfo.fragment = activity.getSupportFragmentManager().findFragmentByTag(tag);
-    if (tabInfo.fragment != null && !tabInfo.fragment.isDetached()){
-      FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction();
-      ft.detach(tabInfo.fragment);
-      ft.commit();
-      activity.getSupportFragmentManager().executePendingTransactions();
-    }
-    
-    tabHost.addTab(tabSpec);
-  }
-  
-  public void onTabChanged(String tag){
-    TabInfo newTab = (TabInfo) this.mapTabInfo.get(tag);
-    if (mLastTab != newTab) {
-      FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
-      if (mLastTab != null){
-        if (mLastTab.fragment != null){
-          ft.detach(mLastTab.fragment);
-        }
-      }
-      if (newTab != null) {
-        if (newTab.fragment == null){
-          newTab.fragment = Fragment.instantiate(this,
-              newTab.clss.getName(), newTab.args);
-          ft.add(R.id.realtabcontent, newTab.fragment, newTab.tag);
-        } else {
-          ft.attach(newTab.fragment);
-        }
-      }
-      mLastTab = newTab;
-      ft.commit();
-      this.getSupportFragmentManager().executePendingTransactions();
-    }
-  }
+public class UnuActivity extends FragmentActivity implements TabHost.OnTabChangeListener {
+	private TabHost mTabHost;
+	private HashMap<String, TabInfo> mapTabInfo = new HashMap<String, TabInfo>();
+	private TabInfo mLastTab = null;
+
+	private class TabInfo {
+		private String tag; 
+		private Class<?> clss;
+		private Bundle args;
+		private Fragment fragment;
+		TabInfo(String tag, Class<?> clss, Bundle args){
+			this.tag = tag;
+			this.clss = clss;
+			this.args = args;
+		}
+	}
+
+	class TabFactory implements TabContentFactory {
+		private final Context mContext;
+
+		public TabFactory(Context context){
+			mContext = context;
+		}
+
+		public View createTabContent(String tag){
+			View v = new View(mContext);
+			v.setMinimumHeight(0);
+			v.setMinimumWidth(0);
+			return v;
+		}
+	}
+
+	protected void onCreate(Bundle savedInstanceState){
+		super.onCreate(savedInstanceState);
+
+		setContentView(R.layout.tabs_layout);
+
+		initializeTabHost(savedInstanceState);
+		if (savedInstanceState != null){
+			mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab"));
+		}
+	}
+
+	protected void onSaveInstanceState(Bundle outState){
+		outState.putString("tab", mTabHost.getCurrentTabTag());
+		super.onSaveInstanceState(outState);
+	}
+
+	private void initializeTabHost(Bundle args){
+		mTabHost = (TabHost)findViewById(android.R.id.tabhost);
+		mTabHost.setup();
+
+		addTab("Inbox", InboxFragment.class, R.drawable.ic_tab_inbox, args);
+		addTab("Patches", PatchesFragment.class, R.drawable.ic_tab_patches, args);
+		addTab("Quilts", QuiltsFragment.class, R.drawable.ic_tab_quilts, args);
+		addTab("Basket", BasketFragment.class, R.drawable.ic_tab_basket, args);
+
+		this.onTabChanged("Inbox");
+		mTabHost.setOnTabChangedListener(this);
+	}
+
+	private void addTab(String name, Class<?> fragment, int resId, Bundle args) {
+		TabInfo tabInfo = new TabInfo(name, fragment, args);
+
+		TabHost.TabSpec tabSpec = mTabHost.newTabSpec(name).setIndicator("",
+                getResources().getDrawable(resId));
+		tabSpec.setContent(new TabFactory(this));
+		
+		tabInfo.fragment = getSupportFragmentManager().findFragmentByTag(tabSpec.getTag());
+		if (tabInfo.fragment != null && !tabInfo.fragment.isDetached()){
+			FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+			ft.detach(tabInfo.fragment);
+			ft.commit();
+			getSupportFragmentManager().executePendingTransactions();
+		}
+
+		mTabHost.addTab(tabSpec);
+		
+		mapTabInfo.put(tabInfo.tag, tabInfo);
+	}
+
+	public void onTabChanged(String tag){
+		TabInfo newTab = this.mapTabInfo.get(tag);
+		if (mLastTab != newTab) {
+			FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
+			if (mLastTab != null){
+				if (mLastTab.fragment != null){
+					ft.detach(mLastTab.fragment);
+				}
+			}
+			if (newTab != null) {
+				if (newTab.fragment == null){
+					newTab.fragment = Fragment.instantiate(this,
+							newTab.clss.getName(), newTab.args);
+					ft.add(R.id.realtabcontent, newTab.fragment, newTab.tag);
+				} else {
+					ft.attach(newTab.fragment);
+				}
+			}
+			mLastTab = newTab;
+			ft.commit();
+			this.getSupportFragmentManager().executePendingTransactions();
+		}
+	}
 }
