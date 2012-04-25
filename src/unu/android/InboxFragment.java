@@ -29,8 +29,8 @@ public class InboxFragment extends ContentViewerFragment {
 //        "src=\"http://www.youtube.com/embed/bIPcobKMB94\" frameborder=\"0\"></iframe>");
     this.addEmbed("<img src = \"http://i.imgur.com/Svphn.jpg\" >");
 //    this.addEmbed("<iframe src=\"http://player.vimeo.com/video/39992890\"></iframe>");
-//    this.addEmbed("<img src=\"http://i.imgur.com/H6XOr.gif\">");
-//    this.addEmbed("<img src=\"http://i.imgur.com/ZaXs2.gif\">");
+    this.addEmbed("<img src=\"http://i.imgur.com/H6XOr.gif\">");
+    this.addEmbed("<img src=\"http://i.imgur.com/ZaXs2.gif\">");
 ////    // use HTML5 embed for soundcloud
 //    this.addEmbed("<iframe width=\"100%\" height=\"166\" scrolling=\"no\" frameborder=\"no\"" +
 //        "src=\"http://w.soundcloud.com/player/?url=http%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F42311114&show_artwork=true\"></iframe>");
