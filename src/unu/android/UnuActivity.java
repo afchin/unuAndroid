@@ -98,9 +98,9 @@ public class UnuActivity extends FragmentActivity implements TabHost.OnTabChange
 			FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
 			if (mLastTab != null){
 				if (mLastTab.fragment != null){
-					if ((mLastTab.tag == "Quilts") || (mLastTab.tag == "Patches")){
-					  ((GroupListFragment) mLastTab.fragment).popTopFragment();
-					}
+//					if ((mLastTab.tag == "Quilts") || (mLastTab.tag == "Patches")){
+//					  ((GroupListFragment) mLastTab.fragment).popTopFragment();
+//					}
 	         ft.detach(mLastTab.fragment);
 				}
 			}

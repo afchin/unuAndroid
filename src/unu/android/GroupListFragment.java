@@ -48,6 +48,8 @@ public class GroupListFragment extends ListFragment {
     ArrayList<String> embeds = new ArrayList<String>();
 //    embeds.add("<img src = \"http://i.imgur.com/s0mKE.gif\" >");
     embeds.add("<img src = \"http://i.imgur.com/NZpzV.jpg\" >");
+    embeds.add("<img src = \"http://i.imgur.com/1Mrxj.jpg\" >");
+    embeds.add("<img src = \"http://i.imgur.com/G6P8J.jpg\" >");
     topFragment = new ContentViewerFragment(embeds);
     FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
