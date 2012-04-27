@@ -98,7 +98,10 @@ public class UnuActivity extends FragmentActivity implements TabHost.OnTabChange
 			FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
 			if (mLastTab != null){
 				if (mLastTab.fragment != null){
-					ft.detach(mLastTab.fragment);
+					if ((mLastTab.tag == "Quilts") || (mLastTab.tag == "Patches")){
+					  ((GroupListFragment) mLastTab.fragment).popTopFragment();
+					}
+	         ft.detach(mLastTab.fragment);
 				}
 			}
 			if (newTab != null) {
@@ -107,6 +110,9 @@ public class UnuActivity extends FragmentActivity implements TabHost.OnTabChange
 							newTab.clss.getName(), newTab.args);
 					ft.add(R.id.realtabcontent, newTab.fragment, newTab.tag);
 				} else {
+//				  if ((mLastTab.tag == "Quilts") || (mLastTab.tag == "Patches")){
+//            ((GroupListFragment) mLastTab.fragment).addTopFragment();
+//          }
 					ft.attach(newTab.fragment);
 				}
 			}
