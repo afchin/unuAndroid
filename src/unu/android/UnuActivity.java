@@ -9,6 +9,7 @@ import android.widget.TabHost;
 import android.widget.TabHost.TabContentFactory;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 public class UnuActivity extends FragmentActivity implements TabHost.OnTabChangeListener {
@@ -98,9 +99,13 @@ public class UnuActivity extends FragmentActivity implements TabHost.OnTabChange
 			FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
 			if (mLastTab != null){
 				if (mLastTab.fragment != null){
-//					if ((mLastTab.tag == "Quilts") || (mLastTab.tag == "Patches")){
+					if ((mLastTab.tag == "Quilts") || (mLastTab.tag == "Patches")){
+					  FragmentManager fm = this.getSupportFragmentManager();
+//					  for (int i = 0; i < fm.getBackStackEntryCount(); i++){
+					    fm.popBackStack();
+//					  }
 //					  ((GroupListFragment) mLastTab.fragment).popTopFragment();
-//					}
+					}
 	         ft.detach(mLastTab.fragment);
 				}
 			}
