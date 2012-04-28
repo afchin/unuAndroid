@@ -26,11 +26,11 @@ public class ContentViewerFragment extends Fragment {
   public ContentViewerFragment(){
     this.embeds = new ArrayList<String>();
   }
-  
+
   public ContentViewerFragment(ArrayList<String> embeds){
     this.embeds = embeds;
   }
-  
+
   public void addEmbed(String newEmbed){
     this.embeds.add(newEmbed);
   }
@@ -38,12 +38,12 @@ public class ContentViewerFragment extends Fragment {
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
-
     super.onCreate(savedInstanceState);
     currView = inflater.inflate(R.layout.contentviewer_frag_layout, container, false);
 
     this.mAdapter  = new ViewPagerAdapter(getActivity(), embeds);
     mPager = (ViewPager)currView.findViewById(R.id.viewpager);
+    mPager.setOffscreenPageLimit(mAdapter.getCount());
     mPager.setAdapter(mAdapter);
 
     new setAdapterTask().execute();
@@ -72,8 +72,8 @@ public class ContentViewerFragment extends Fragment {
         webview.getSettings().setPluginState(PluginState.ON);
         webview.getSettings().setLoadWithOverviewMode(true);
         webview.getSettings().setBuiltInZoomControls(true);
-//        need to comment this out for api level <8 
-//        webview.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+        //        need to comment this out for api level <8 
+        //        webview.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         webview.setBackgroundColor(0x00000000);
 
         webview.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
@@ -91,10 +91,10 @@ public class ContentViewerFragment extends Fragment {
       ((ViewPager) view).removeView((WebView) object);
     }
 
-    @Override
-    public void finishUpdate(View arg0) {
-
-    }
+//    @Override
+//    public void finishUpdate(View arg0) {
+//
+//    }
 
     @Override
     public int getCount() {
@@ -114,20 +114,20 @@ public class ContentViewerFragment extends Fragment {
       return view == object;
     }
 
-    @Override
-    public void restoreState(Parcelable arg0, ClassLoader arg1) {
+//    @Override
+//    public void restoreState(Parcelable arg0, ClassLoader arg1) {
+//
+//    }
+//
+//    @Override
+//    public Parcelable saveState() {
+//      return null;
+//    }
 
-    }
-
-    @Override
-    public Parcelable saveState() {
-      return null;
-    }
-
-    @Override
-    public void startUpdate(View arg0) {
-
-    }
+//    @Override
+//    public void startUpdate(View arg0) {
+//
+//    }
 
   }
   private class setAdapterTask extends AsyncTask<Void,Void,Void>{

@@ -25,7 +25,6 @@ public class GroupListFragment extends ListFragment {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
   }
   
   protected void addGroup(String group){
@@ -50,12 +49,13 @@ public class GroupListFragment extends ListFragment {
     embeds.add("<img src = \"http://i.imgur.com/NZpzV.jpg\" >");
     embeds.add("<img src = \"http://i.imgur.com/1Mrxj.jpg\" >");
     embeds.add("<img src = \"http://i.imgur.com/G6P8J.jpg\" >");
+    
     topFragment = new ContentViewerFragment(embeds);
     FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
     transaction.replace(R.id.realtabcontent, topFragment);
     transaction.addToBackStack(null);
-    transaction.addToBackStack(this.getClass().toString());
+//    transaction.addToBackStack(this.getClass().toString());
     transaction.commit();
 
     //    String item = (String) getListAdapter().getItem(position);
@@ -72,25 +72,25 @@ public class GroupListFragment extends ListFragment {
     //    }
   }
   
-  public void popTopFragment(){
-    if (topFragment != null){
-      FragmentTransaction transaction = getFragmentManager().beginTransaction();
-
-      transaction.addToBackStack(topFragment.getClass().toString());
+//  public void popTopFragment(){
+//    if (topFragment != null){
+//      FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//
+//      transaction.addToBackStack(topFragment.getClass().toString());
+////      transaction.addToBackStack(null);
+////      transaction.addToBackStack(this.getClass().toString());
+//      transaction.commit();
+//    }
+//  }
+//  
+//  public void addTopFragment(){
+//    if (topFragment != null){
+//      FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//
+//      transaction.replace(R.id.realtabcontent, topFragment);
 //      transaction.addToBackStack(null);
-//      transaction.addToBackStack(this.getClass().toString());
-      transaction.commit();
-    }
-  }
-  
-  public void addTopFragment(){
-    if (topFragment != null){
-      FragmentTransaction transaction = getFragmentManager().beginTransaction();
-
-      transaction.replace(R.id.realtabcontent, topFragment);
-      transaction.addToBackStack(null);
-//      transaction.addToBackStack(this.getClass().toString());
-      transaction.commit();
-    }
-  }
+////      transaction.addToBackStack(this.getClass().toString());
+//      transaction.commit();
+//    }
+//  }
 }

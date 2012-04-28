@@ -102,7 +102,7 @@ public class UnuActivity extends FragmentActivity implements TabHost.OnTabChange
 					if ((mLastTab.tag == "Quilts") || (mLastTab.tag == "Patches")){
 					  FragmentManager fm = this.getSupportFragmentManager();
 //					  for (int i = 0; i < fm.getBackStackEntryCount(); i++){
-					    fm.popBackStack();
+//					    fm.popBackStack();
 //					  }
 //					  ((GroupListFragment) mLastTab.fragment).popTopFragment();
 					}
