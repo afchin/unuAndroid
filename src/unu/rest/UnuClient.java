@@ -21,12 +21,11 @@ public class UnuClient extends RestClient {
 	
 	private static final String loginUsername = "user[email]";
 	private static final String loginPassword = "user[password]";
-	private static final String loginMethod = "POST";
 	public boolean logIn(String username, String password) {
 		HashMap<String, String> params = new HashMap<String, String>(2);
 		params.put(loginUsername, username);
 		params.put(loginPassword, password);
-		Response<Object> response = submitRequest(loginEndpoint, loginMethod, params);
+		Response response = post(loginEndpoint, params);
 		return response.getStatusCode() == HttpURLConnection.HTTP_MOVED_TEMP;
 	}
 }
