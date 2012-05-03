@@ -34,7 +34,19 @@ public class RestClient {
 	}
 
 	public Response get(URL endpoint) {
-		throw new UnsupportedOperationException("GET support not implemented in RestClient yet");
+		HttpURLConnection conn = null;
+		try {
+			// Connect to endpoint (defaults to GET)
+			conn = (HttpURLConnection) endpoint.openConnection();
+			// Read and return the result
+			return new Response(conn.getResponseCode(), conn.getContent());
+		} catch (IOException e) {
+			return null;
+		} finally {
+			if (conn != null) {
+				conn.disconnect();
+			}
+		}
 	}
 	
 	public Response post(URL endpoint, Map<? extends String, ? extends String> params) {
@@ -57,14 +69,6 @@ public class RestClient {
 		}
 	}
 
-	public Response delete(URL endpoint) {
-		throw new UnsupportedOperationException("DELETE support not implemented in RestClient yet");
-	}
-	
-	public Response put(URL endpoint, Map<? extends String, ? extends String> params) {
-		throw new UnsupportedOperationException("PUT support not implemented in RestClient yet");
-	}
-	
 	private static final String paramSeparator = "&";
 	private static final String nameValueSeparator = "=";
 	protected byte[] urlEncode(Map<? extends String, ? extends String> params) {
