@@ -101,10 +101,8 @@ public class UnuActivity extends FragmentActivity implements TabHost.OnTabChange
 				if (mLastTab.fragment != null){
 					if ((mLastTab.tag == "Quilts") || (mLastTab.tag == "Patches")){
 					  FragmentManager fm = this.getSupportFragmentManager();
-//					  for (int i = 0; i < fm.getBackStackEntryCount(); i++){
-//					    fm.popBackStack();
-//					  }
-//					  ((GroupListFragment) mLastTab.fragment).popTopFragment();
+					  // right now, need this because of disappearing fragment problem
+					    fm.popBackStack();
 					}
 	         ft.detach(mLastTab.fragment);
 				}
@@ -113,7 +111,7 @@ public class UnuActivity extends FragmentActivity implements TabHost.OnTabChange
 				if (newTab.fragment == null){
 					newTab.fragment = Fragment.instantiate(this,
 							newTab.clss.getName(), newTab.args);
-					ft.add(R.id.realtabcontent, newTab.fragment, newTab.tag);
+					ft.replace(R.id.realtabcontent, newTab.fragment, newTab.tag);
 				} else {
 //				  if ((mLastTab.tag == "Quilts") || (mLastTab.tag == "Patches")){
 //            ((GroupListFragment) mLastTab.fragment).addTopFragment();

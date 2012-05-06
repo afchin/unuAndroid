@@ -54,8 +54,8 @@ public class GroupListFragment extends ListFragment {
     FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
     transaction.replace(R.id.realtabcontent, topFragment);
-    transaction.addToBackStack(null);
-//    transaction.addToBackStack(this.getClass().toString());
+//    transaction.addToBackStack(null);
+    transaction.addToBackStack(this.getClass().toString());
     transaction.commit();
 
     //    String item = (String) getListAdapter().getItem(position);
