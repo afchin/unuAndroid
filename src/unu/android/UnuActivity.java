@@ -113,9 +113,6 @@ public class UnuActivity extends FragmentActivity implements TabHost.OnTabChange
 							newTab.clss.getName(), newTab.args);
 					ft.replace(R.id.realtabcontent, newTab.fragment, newTab.tag);
 				} else {
-//				  if ((mLastTab.tag == "Quilts") || (mLastTab.tag == "Patches")){
-//            ((GroupListFragment) mLastTab.fragment).addTopFragment();
-//          }
 					ft.attach(newTab.fragment);
 				}
 			}

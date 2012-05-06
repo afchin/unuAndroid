@@ -46,7 +46,7 @@ public class GroupListFragment extends ListFragment {
 
     ArrayList<String> embeds = new ArrayList<String>();
 //    embeds.add("<img src = \"http://i.imgur.com/s0mKE.gif\" >");
-    embeds.add("<img src = \"http://i.imgur.com/NZpzV.jpg\" >");
+//    embeds.add("<img src = \"http://i.imgur.com/NZpzV.jpg\" >");
     embeds.add("<img src = \"http://i.imgur.com/1Mrxj.jpg\" >");
     embeds.add("<img src = \"http://i.imgur.com/G6P8J.jpg\" >");
     
@@ -54,8 +54,8 @@ public class GroupListFragment extends ListFragment {
     FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
     transaction.replace(R.id.realtabcontent, topFragment);
-//    transaction.addToBackStack(null);
-    transaction.addToBackStack(this.getClass().toString());
+    transaction.addToBackStack(null);
+//    transaction.addToBackStack(this.getClass().toString());
     transaction.commit();
 
     //    String item = (String) getListAdapter().getItem(position);
