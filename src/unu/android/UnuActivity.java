@@ -68,6 +68,7 @@ public class UnuActivity extends FragmentActivity implements TabHost.OnTabChange
 		addTab("Patches", PatchesFragment.class, R.drawable.ic_tab_patches, args);
 		addTab("Quilts", QuiltsFragment.class, R.drawable.ic_tab_quilts, args);
 		addTab("Basket", BasketFragment.class, R.drawable.ic_tab_basket, args);
+		addTab("Browser", WebFragment.class, R.drawable.view_scrap, args);
 
 		this.onTabChanged("Inbox");
 		mTabHost.setOnTabChangedListener(this);

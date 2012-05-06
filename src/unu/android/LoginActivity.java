@@ -13,7 +13,7 @@ import unu.rest.UnuClient;
 public class LoginActivity extends Activity{
   EditText username, password;
   TextView status;
-  UnuClient unuClient = new UnuClient();
+//  UnuClient unuClient = new UnuClient();
   
   @Override
   public void onCreate(Bundle savedInstanceState) {
