@@ -27,7 +27,6 @@ public class WebFragment extends Fragment{
     tbar.setText("http://www.google.com");
     lWeb = (WebView) currView.findViewById(R.id.webView);
     Button goBtn = (Button) currView.findViewById(R.id.go);
-    goBtn.setText("Go");
 
     goBtn.setOnClickListener(new View.OnClickListener() {
       @Override
