@@ -4,7 +4,9 @@ import java.util.HashMap;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TabHost.TabContentFactory;
 import android.support.v4.app.Fragment;
@@ -63,15 +65,30 @@ public class UnuActivity extends FragmentActivity implements TabHost.OnTabChange
 	private void initializeTabHost(Bundle args){
 		mTabHost = (TabHost)findViewById(android.R.id.tabhost);
 		mTabHost.setup();
-
+		
 		addTab("Inbox", InboxFragment.class, R.drawable.ic_tab_inbox, args);
 		addTab("Patches", PatchesFragment.class, R.drawable.ic_tab_patches, args);
 		addTab("Quilts", QuiltsFragment.class, R.drawable.ic_tab_quilts, args);
 		addTab("Basket", BasketFragment.class, R.drawable.ic_tab_basket, args);
 		addTab("Browser", WebFragment.class, R.drawable.view_scrap, args);
+    
 
 		this.onTabChanged("Inbox");
 		mTabHost.setOnTabChangedListener(this);
+		
+		
+		Display display = getWindowManager().getDefaultDisplay(); 
+		int width = display.getWidth();  // deprecated
+		int height = display.getHeight();  // deprecated
+		
+		for (int i = 0; i < mapTabInfo.size(); i++){
+//		   mTabHost.getTabWidget().getChildAt(i).setLayoutParams(new 
+//		        LinearLayout.LayoutParams(150, 100));  
+		  mTabHost.getTabWidget().getChildAt(i).getLayoutParams().width = (int) 
+		      (width/5);
+		}
+
+
 	}
 
 	private void addTab(String name, Class<?> fragment, int resId, Bundle args) {
