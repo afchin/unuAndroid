@@ -64,9 +64,7 @@ public class ImageFragment extends Fragment {
         webview.getSettings().setPluginState(PluginState.ON);
         webview.getSettings().setLoadWithOverviewMode(true);
         webview.getSettings().setBuiltInZoomControls(true);
-        webview.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         webview.setBackgroundColor(0x00000000);
-
         webview.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
         webview.setScrollbarFadingEnabled(false);
 

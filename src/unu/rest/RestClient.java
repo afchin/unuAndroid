@@ -1,14 +1,17 @@
 package unu.rest;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.CookieHandler;
-import java.net.CookieManager;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.Map;
+
+import unu.rest.java.net.CookieManager;
 
 /** Provides methods to access a REST server that uses URL encoded parameters.
  * @author Alexandre Boulgakov
@@ -19,11 +22,20 @@ public class RestClient {
 	 * @author Alexandre Boulgakov
 	 */
 	public class Response {
+		
+		/** Creates a Response object from the passed connection object.
+		 * @param conn An open connection
+		 * @throws IOException Thrown if the status or input stream cannot be retrieved
+		 */
+		public Response(HttpURLConnection conn) throws IOException {
+			this(conn.getResponseCode(), new BufferedReader(new InputStreamReader(conn.getInputStream())));
+		}
+		
 		/** Creates a Response object with the passed response.
 		 * @param statusCode The returned HTTP status code
 		 * @param content The returned content
 		 */
-		public Response(int statusCode, Object content) {
+		public Response(int statusCode, BufferedReader content) {
 			this.statusCode = statusCode;
 			this.content = content;
 		}
@@ -37,13 +49,12 @@ public class RestClient {
 			return statusCode;
 		}
 		
-		/** Returned content */
-		private Object content;
-		/** Gets the content associated with this response.
-		 * The content is decoded using the Content-Type HTTP header of the response
-		 * @return The content associated with this response
+		/** Reader for returned content stream */
+		private BufferedReader content;
+		/** Gets the content reader for the content associated with this response.
+		 * @return A buffered reader to read the response content
 		 */
-		public Object getContent() {
+		public BufferedReader getContent() {
 			return content;
 		}
 	}
@@ -69,7 +80,7 @@ public class RestClient {
 			// Connect to endpoint (defaults to GET)
 			conn = (HttpURLConnection) endpoint.openConnection();
 			// Read and return the result
-			return new Response(conn.getResponseCode(), conn.getContent());
+			return new Response(conn);
 		} catch (IOException e) {
 			return null;
 		} finally {
@@ -95,7 +106,7 @@ public class RestClient {
 			// Write the application/x-www-form-urlencoded parameters
 			conn.getOutputStream().write(urlEncode(params));
 			// Read and return the result
-			return new Response(conn.getResponseCode(), conn.getContent());
+			return new Response(conn);
 		} catch (IOException e) {
 			return null;
 		} finally {
@@ -127,6 +138,11 @@ public class RestClient {
 				throw new RuntimeException("Invalid charset name in RestClient: " + charsetName);
 			}
 		}
-		return encoded.toString().getBytes(charset);
+		try {
+			return encoded.toString().getBytes(charsetName);
+		} catch (UnsupportedEncodingException e) {
+			// Should not get here since charsetName should be valid
+			throw new RuntimeException("Invalid charset name in RestClient: " + charsetName);
+		}
 	}
 }
