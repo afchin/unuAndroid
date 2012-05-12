@@ -71,6 +71,7 @@ public class UnuActivity extends FragmentActivity implements TabHost.OnTabChange
 		addTab("Quilts", QuiltsFragment.class, R.drawable.ic_tab_quilts, args);
 		addTab("Basket", BasketFragment.class, R.drawable.ic_tab_basket, args);
 		addTab("Browser", WebFragment.class, R.drawable.view_scrap, args);
+    addTab("Friends", FriendsFragment.class, R.drawable.view_scrap, args);
     
 
 		this.onTabChanged("Inbox");
@@ -85,7 +86,7 @@ public class UnuActivity extends FragmentActivity implements TabHost.OnTabChange
 //		   mTabHost.getTabWidget().getChildAt(i).setLayoutParams(new 
 //		        LinearLayout.LayoutParams(150, 100));  
 		  mTabHost.getTabWidget().getChildAt(i).getLayoutParams().width = (int) 
-		      (width/5);
+		      (width/4);
 		}
 
 
