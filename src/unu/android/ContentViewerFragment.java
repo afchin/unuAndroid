@@ -1,6 +1,7 @@
 package unu.android;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
@@ -21,13 +22,13 @@ public class ContentViewerFragment extends Fragment {
   private ViewPagerAdapter mAdapter;
   private ViewPager mPager;
   private View currView;
-  ArrayList<String> embeds;
+  List<String> embeds;
 
   public ContentViewerFragment(){
     this.embeds = new ArrayList<String>();
   }
 
-  public ContentViewerFragment(ArrayList<String> embeds){
+  public ContentViewerFragment(List<String> embeds){
     this.embeds = embeds;
   }
 
@@ -54,9 +55,9 @@ public class ContentViewerFragment extends Fragment {
   private class ViewPagerAdapter extends PagerAdapter {
 
     private ArrayList<View> views;
-    private ArrayList<String> embeds;
+    private List<String> embeds;
 
-    public ViewPagerAdapter(Context context, ArrayList<String> embeds) {
+    public ViewPagerAdapter(Context context, List<String> embeds) {
       views = new ArrayList<View>();
       this.embeds = embeds;
       for (String url: embeds){  

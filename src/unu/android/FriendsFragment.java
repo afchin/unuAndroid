@@ -21,13 +21,13 @@ import android.widget.TextView;
 
 public class FriendsFragment extends Fragment{
   private static final String ROW_SPACE = "     ";
-  private LinkedHashMap<String, String> mapFriendInfo = new LinkedHashMap<String, String>();
+  private HashMap<String, String> mapFriendInfo = new HashMap<String, String>();
   private TableLayout table;
   private final String mimeType = "text/html";
   private final String encoding = "utf-8";
   private final String DEFAULT_ICON_SRC = "<img src = \"http://i.imgur.com/oTniP.png\" >";
   
-  public FriendsFragment(LinkedHashMap<String, String> mFriendInfo){
+  public FriendsFragment(HashMap<String, String> mFriendInfo){
     this.mapFriendInfo = mFriendInfo;
   }
   

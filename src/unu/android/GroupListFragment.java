@@ -1,6 +1,7 @@
 package unu.android;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -21,7 +22,7 @@ import android.widget.LinearLayout;
 public class GroupListFragment extends ListFragment {
 
   private Fragment topFragment;
-  private ArrayList<String> values = new ArrayList<String>();
+  private List<String> values = new ArrayList<String>();
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
