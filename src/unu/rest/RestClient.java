@@ -13,12 +13,12 @@ import java.util.Map;
 /** Provides methods to access a REST server that uses URL encoded parameters.
  * @author Alexandre Boulgakov
  */
-public class RestClient {
+public abstract class RestClient {
 	
 	/** Represents a REST response with an HTTP status code and content 
 	 * @author Alexandre Boulgakov
 	 */
-	public class Response {
+	public static class Response {
 		
 		/** Creates a Response object with the passed response.
 		 * @param statusCode The returned HTTP status code
@@ -58,7 +58,7 @@ public class RestClient {
 	 * @param endpoint The URL to which the GET request will be sent
 	 * @return The response returned by the server
 	 */
-	public Response get(URL endpoint) {
+	public static Response get(URL endpoint) {
 		HttpURLConnection conn = null;
 		try {
 			/* *** REQUEST *** */
@@ -96,7 +96,7 @@ public class RestClient {
 	 * @param params The set of parameter keys and values 
 	 * @return The response returned by the server
 	 */
-	public Response post(URL endpoint, Map<? extends String, ? extends String> params) {
+	public static Response post(URL endpoint, Map<? extends String, ? extends String> params) {
 		HttpURLConnection conn = null;
 		try {
 			/* *** REQUEST *** */
@@ -138,7 +138,7 @@ public class RestClient {
 	 * @return The contents of {@code is}
 	 * @throws IOException if there is an error reading {@code is}.
 	 */
-	public String readStream(InputStream is) throws IOException {
+	public static String readStream(InputStream is) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(is));
 		StringBuilder result = new StringBuilder();
 		String line = br.readLine();
@@ -158,7 +158,7 @@ public class RestClient {
 	 * @param params The set of parameter keys and values 
 	 * @return The encoded bytestring 
 	 */
-	protected byte[] urlEncode(Map<? extends String, ? extends String> params) {
+	protected static byte[] urlEncode(Map<? extends String, ? extends String> params) {
 		StringBuilder encoded = new StringBuilder();
 		
 		for (Map.Entry<? extends String, ? extends String> param : params.entrySet()) {

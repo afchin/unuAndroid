@@ -8,7 +8,7 @@ import java.util.HashMap;
 /** Provides common methods to access the unu REST server.
  * @author Alexandre Boulgakov
  */
-public class UnuClient extends RestClient {
+public abstract class UnuClient extends RestClient {
 	/* ENDPOINTS. These are initialized in a static initializer since they
 	 * can throw a checked exception (MalformedURLException).
 	 */
@@ -35,18 +35,18 @@ public class UnuClient extends RestClient {
 	}
 	
 	/** Current user's ID or 0 if no user is logged in */
-	protected int userId = 0;
+	protected static int userId = 0;
 	/** Checks if the user logged in using the cached user ID.
 	 * @return True if the user is logged in
 	 */
-	public boolean isLoggedInCached() {
+	public static boolean isLoggedInCached() {
 		return userId != 0;
 	}
 	
 	/** Checks if the user is currently logged in.
 	 * @return True if the user is logged in
 	 */
-	public boolean isLoggedIn() {
+	public static boolean isLoggedIn() {
 		Response response = get(getUidEndpoint);
 		if (response.getStatusCode() == HttpURLConnection.HTTP_OK) {
 			userId = Integer.parseInt(response.getContent());
@@ -67,7 +67,7 @@ public class UnuClient extends RestClient {
 	 * @param password User's password
 	 * @return True if the user was successfully logged in
 	 */
-	public boolean logIn(String username, String password) {
+	public static boolean logIn(String username, String password) {
 		HashMap<String, String> params = new HashMap<String, String>(2);
 		params.put(loginUsername, username);
 		params.put(loginPassword, password);
@@ -84,7 +84,7 @@ public class UnuClient extends RestClient {
 	 * @param source TODO
 	 * @throws AuthenticationException Thrown if the user is not logged in
 	 */
-	public void postContent(String body, String source) throws AuthenticationException {
+	public static void postContent(String body, String source) throws AuthenticationException {
 		if (!isLoggedInCached() && !isLoggedIn()) {
 			throw new AuthenticationException();
 		}
