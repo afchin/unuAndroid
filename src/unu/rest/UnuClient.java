@@ -18,18 +18,8 @@ public class UnuClient extends RestClient {
 	private static final URL loginEndpoint;
 	/** Create a new inbox scrap (POST) */
 	private static final URL createScrapEndpoint;
-	
-	/** True if the user is currently logged in.
-	 * This value can be checked before issuing requests that require the user to be logged in. 
-	 */
-	protected boolean loggedIn = false;
-	/** Checks if the user is currently logged in.
-	 * @return True if the user is logged in
-	 */
-	public boolean isLoggedIn() {
-		// TODO: Query unu to check if user is logged in instead of dead-reckoning
-		return loggedIn;
-	}
+	/** Get current user ID (GET) */
+	private static final URL getUidEndpoint;
 	
 	/** Initialize all endpoints */
 	static {
@@ -37,10 +27,35 @@ public class UnuClient extends RestClient {
 			root = new URL("http://www.unu.fm");
 			loginEndpoint = new URL(root, "/users/login");
 			createScrapEndpoint = new URL(root, "/inbox_scraps");
+			getUidEndpoint = new URL(root, "/users/me.json");
 		} catch (MalformedURLException e) {
 			// Should not get here since all of the endpoints are valid URL strings
 			throw new RuntimeException("Invalid endpoints in UnuClient", e);
 		}
+	}
+	
+	/** Current user's ID or 0 if no user is logged in */
+	protected int userId = 0;
+	/** Checks if the user logged in using the cached user ID.
+	 * @return True if the user is logged in
+	 */
+	public boolean isLoggedInCached() {
+		return userId != 0;
+	}
+	
+	/** Checks if the user is currently logged in.
+	 * @return True if the user is logged in
+	 */
+	public boolean isLoggedIn() {
+		Response response = get(getUidEndpoint);
+		if (response.getStatusCode() == HttpURLConnection.HTTP_OK) {
+			userId = Integer.parseInt(response.getContent());
+		} else {
+			// TODO: This is a temporary plug for a backend bug
+			userId = 0;
+		}
+		
+		return isLoggedInCached();
 	}
 	
 	/** Name of the username parameter for the log-in request */
@@ -56,10 +71,7 @@ public class UnuClient extends RestClient {
 		HashMap<String, String> params = new HashMap<String, String>(2);
 		params.put(loginUsername, username);
 		params.put(loginPassword, password);
-		Response response = post(loginEndpoint, params);
-		/* The server responds with HTTP_MOVED_TEMP on log in to redirect users to the home page.
-		 * If the credentials are rejected, the server responds with an HTTP_OK. */
-		loggedIn = response.getStatusCode() == HttpURLConnection.HTTP_MOVED_TEMP;
+		post(loginEndpoint, params);
 		return isLoggedIn();
 	}
 	
@@ -73,7 +85,7 @@ public class UnuClient extends RestClient {
 	 * @throws AuthenticationException Thrown if the user is not logged in
 	 */
 	public void postContent(String body, String source) throws AuthenticationException {
-		if (!isLoggedIn()) {
+		if (!isLoggedInCached() && !isLoggedIn()) {
 			throw new AuthenticationException();
 		}
 		HashMap<String, String> params = new HashMap<String, String>(2);

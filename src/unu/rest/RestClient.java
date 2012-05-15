@@ -2,16 +2,13 @@ package unu.rest;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.CookieHandler;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.nio.charset.Charset;
 import java.util.Map;
-
-import unu.rest.java.net.CookieManager;
 
 /** Provides methods to access a REST server that uses URL encoded parameters.
  * @author Alexandre Boulgakov
@@ -23,19 +20,11 @@ public class RestClient {
 	 */
 	public class Response {
 		
-		/** Creates a Response object from the passed connection object.
-		 * @param conn An open connection
-		 * @throws IOException Thrown if the status or input stream cannot be retrieved
-		 */
-		public Response(HttpURLConnection conn) throws IOException {
-			this(conn.getResponseCode(), new BufferedReader(new InputStreamReader(conn.getInputStream())));
-		}
-		
 		/** Creates a Response object with the passed response.
 		 * @param statusCode The returned HTTP status code
 		 * @param content The returned content
 		 */
-		public Response(int statusCode, BufferedReader content) {
+		public Response(int statusCode, String content) {
 			this.statusCode = statusCode;
 			this.content = content;
 		}
@@ -49,26 +38,21 @@ public class RestClient {
 			return statusCode;
 		}
 		
-		/** Reader for returned content stream */
-		private BufferedReader content;
-		/** Gets the content reader for the content associated with this response.
-		 * @return A buffered reader to read the response content
+		/** Returned content */
+		private String content;
+		/** Gets the content associated with this response.
+		 * @return The response content
 		 */
-		public BufferedReader getContent() {
+		public String getContent() {
 			return content;
 		}
 	}
 	
 	/** The name of the charset to use for parameter encoding */
 	private static final String charsetName = "UTF-8";
-	/** The charset to use for parameter encoding */
-	private static final Charset charset = Charset.forName(charsetName);
 	
-	/** Enables cookies */
-	static {
-		// Enable VM-wide HTTP cookie management
-		CookieHandler.setDefault(new CookieManager());
-	}
+	/** Keep track of cookie at the class level to avoid the need for serialization */
+	private static String cookie = null;
 
 	/** Issues a parameterless GET request to the specified endpoint
 	 * @param endpoint The URL to which the GET request will be sent
@@ -77,10 +61,26 @@ public class RestClient {
 	public Response get(URL endpoint) {
 		HttpURLConnection conn = null;
 		try {
+			/* *** REQUEST *** */
+			
 			// Connect to endpoint (defaults to GET)
 			conn = (HttpURLConnection) endpoint.openConnection();
+			// Intercept redirects
+			conn.setInstanceFollowRedirects(false);
+			// Send cookie
+			if (cookie != null) {
+				conn.setRequestProperty("Cookie", cookie);
+			}
+			
+			
+			/* *** RESPONSE *** */
+			
+			// Receive cookie
+			if (conn.getHeaderField("Set-Cookie") != null) {
+				cookie = conn.getHeaderField("Set-Cookie");
+			}
 			// Read and return the result
-			return new Response(conn);
+			return new Response(conn.getResponseCode(), readStream(conn.getInputStream()));
 		} catch (IOException e) {
 			return null;
 		} finally {
@@ -99,14 +99,31 @@ public class RestClient {
 	public Response post(URL endpoint, Map<? extends String, ? extends String> params) {
 		HttpURLConnection conn = null;
 		try {
+			/* *** REQUEST *** */
+			
 			// Connect to endpoint
 			conn = (HttpURLConnection) endpoint.openConnection();
+			// Intercept redirects
+			conn.setInstanceFollowRedirects(false);
+			// Send cookie
+			if (cookie != null) {
+				conn.setRequestProperty("Cookie", cookie);
+			}
 			// Defaults to POST
 			conn.setDoOutput(true);
+
 			// Write the application/x-www-form-urlencoded parameters
 			conn.getOutputStream().write(urlEncode(params));
+			
+			
+			/* *** RESPONSE *** */
+			
+			// Receive cookie
+			if (conn.getHeaderField("Set-Cookie") != null) {
+				cookie = conn.getHeaderField("Set-Cookie");
+			}
 			// Read and return the result
-			return new Response(conn);
+			return new Response(conn.getResponseCode(), readStream(conn.getInputStream()));
 		} catch (IOException e) {
 			return null;
 		} finally {
@@ -114,6 +131,23 @@ public class RestClient {
 				conn.disconnect();
 			}
 		}
+	}
+	
+	/** Reads contents of {@code is} to end
+	 * @param is The {@link InputStream} to read
+	 * @return The contents of {@code is}
+	 * @throws IOException if there is an error reading {@code is}.
+	 */
+	public String readStream(InputStream is) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(is));
+		StringBuilder result = new StringBuilder();
+		String line = br.readLine();
+		while (line != null) {
+			result.append(line);
+			line = br.readLine();
+		}
+		br.close();
+		return result.toString();
 	}
 
 	/** Separates URL-encoded parameters */
