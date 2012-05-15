@@ -85,8 +85,15 @@ public class UnuActivity extends FragmentActivity implements TabHost.OnTabChange
 		for (int i = 0; i < mapTabInfo.size(); i++){
 //		   mTabHost.getTabWidget().getChildAt(i).setLayoutParams(new 
 //		        LinearLayout.LayoutParams(150, 100));  
-		  mTabHost.getTabWidget().getChildAt(i).getLayoutParams().width = (int) 
-		      (width/4);
+//		  mTabHost.getTabWidget().getChildAt(i).getLayoutParams().width = (int) 
+//		      (width/4);
+		  if (width/4 > 200) {
+	      mTabHost.getTabWidget().getChildAt(i).getLayoutParams().width = (int) 
+          (width/4);	    
+		  } else {
+        mTabHost.getTabWidget().getChildAt(i).getLayoutParams().width = 175;     		    
+		  }
+
 		}
 
 

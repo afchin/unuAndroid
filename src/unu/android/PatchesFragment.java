@@ -1,8 +1,16 @@
 package unu.android;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import unu.rest.AuthenticationException;
+import unu.rest.Patch;
+import unu.rest.PatchList;
+import unu.rest.UnuClient;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -20,9 +28,22 @@ import android.widget.LinearLayout;
 
 public class PatchesFragment extends GroupListFragment {
 
+  PatchList patchList;
+
+  
   public PatchesFragment() {
     super();
-    this.addGroup("Patch1");
-    this.addGroup("Patch2");
+    try {
+      patchList = UnuClient.listPatches();
+    } catch (AuthenticationException e) {
+      Intent i = new Intent(this.getActivity().getApplicationContext(), LoginActivity.class);
+            startActivity(i);
+    }
+
+    // start from 1 to exclude the "Profile"
+    for (int i = 1; i < patchList.length(); i++) {
+      this.addGroup(patchList.get(i));
+    }
   }
+  
 }

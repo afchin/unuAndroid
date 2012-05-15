@@ -1,7 +1,11 @@
 package unu.android;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
+import unu.rest.AuthenticationException;
+import unu.rest.Patch;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -23,13 +27,16 @@ public class GroupListFragment extends ListFragment {
 
   private Fragment topFragment;
   private List<String> values = new ArrayList<String>();
+  private List<Patch> patches = new ArrayList<Patch>();
+  
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
   }
   
-  protected void addGroup(String group){
-    this.values.add(group);
+  protected void addGroup(Patch patch){
+    this.patches.add(patch);
+    this.values.add(patch.getTitle());
   }
 
   @Override
@@ -45,11 +52,15 @@ public class GroupListFragment extends ListFragment {
   @Override
   public void onListItemClick(ListView l, View v, int position, long id) {
 
-    ArrayList<String> embeds = new ArrayList<String>();
-//    embeds.add("<img src = \"http://i.imgur.com/s0mKE.gif\" >");
-//    embeds.add("<img src = \"http://i.imgur.com/NZpzV.jpg\" >");
-    embeds.add("<img src = \"http://i.imgur.com/1Mrxj.jpg\" >");
-    embeds.add("<img src = \"http://i.imgur.com/G6P8J.jpg\" >");
+    List<String> embeds = new ArrayList<String>();
+    try {
+      embeds = patches.get(position).getBodies();
+    } catch (AuthenticationException e) {
+      // TODO Auto-generated catch block
+      // show the error image
+      embeds.add("<img src = \"http://i.imgur.com/MTdDt.png\" >");
+    }
+
     
     topFragment = new ContentViewerFragment(embeds);
     FragmentTransaction transaction = getFragmentManager().beginTransaction();
