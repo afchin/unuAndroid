@@ -13,13 +13,26 @@ public abstract class UnuClient extends RestClient {
 	 * can throw a checked exception (MalformedURLException).
 	 */
 	/** The unu REST server root */
-	private static final URL root;
+	protected static final URL root;
 	/** Log in (POST) */
 	private static final URL loginEndpoint;
 	/** Create a new inbox scrap (POST) */
 	private static final URL createScrapEndpoint;
 	/** Get current user ID (GET) */
 	private static final URL getUidEndpoint;
+	/** Get a list of current user's patches (GET)
+	 * @return TODO:
+	 */
+	private static URL listPatchesEndpoint() {
+		try {
+			return new URL(root, "/users/" + userId + "/patches.json");
+		} catch (MalformedURLException e) {
+			// Should not get here since all of the endpoints are valid URL strings
+			throw new RuntimeException("Invalid endpoints in UnuClient", e);
+		}
+	}
+	/** Get inbox ID (GET) */
+	private static final URL inboxIdEndpoint;
 	
 	/** Initialize all endpoints */
 	static {
@@ -28,6 +41,7 @@ public abstract class UnuClient extends RestClient {
 			loginEndpoint = new URL(root, "/users/login");
 			createScrapEndpoint = new URL(root, "/inbox_scraps");
 			getUidEndpoint = new URL(root, "/users/me.json");
+			inboxIdEndpoint = new URL(root, "/inbox.json");
 		} catch (MalformedURLException e) {
 			// Should not get here since all of the endpoints are valid URL strings
 			throw new RuntimeException("Invalid endpoints in UnuClient", e);
@@ -85,12 +99,27 @@ public abstract class UnuClient extends RestClient {
 	 * @throws AuthenticationException Thrown if the user is not logged in
 	 */
 	public static void postContent(String body, String source) throws AuthenticationException {
-		if (!isLoggedInCached() && !isLoggedIn()) {
-			throw new AuthenticationException();
-		}
 		HashMap<String, String> params = new HashMap<String, String>(2);
 		params.put(inboxScrapBody, body);
 		params.put(inboxScrapSource, source);
 		post(createScrapEndpoint, params);
+	}
+	
+	public static PatchList listPatches() throws AuthenticationException {
+		Response response = get(listPatchesEndpoint());
+		if (response.getStatusCode() != HttpURLConnection.HTTP_OK) {
+			throw new AuthenticationException();
+		}
+		
+		return new PatchList(response.getContent());
+	}
+	
+	public static Inbox getInbox() throws AuthenticationException {
+		Response response = get(inboxIdEndpoint);
+		if (response.getStatusCode() != HttpURLConnection.HTTP_OK) {
+			throw new AuthenticationException();
+		}
+		
+		return new Inbox(response.getContent());
 	}
 }
