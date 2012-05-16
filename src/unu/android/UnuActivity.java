@@ -65,7 +65,8 @@ public class UnuActivity extends FragmentActivity implements TabHost.OnTabChange
 	private void initializeTabHost(Bundle args){
 		mTabHost = (TabHost)findViewById(android.R.id.tabhost);
 		mTabHost.setup();
-		
+
+    addTab("Profile", ProfileFragment.class, R.drawable.view_scrap, args);
 		addTab("Inbox", InboxFragment.class, R.drawable.ic_tab_inbox, args);
 		addTab("Patches", PatchesFragment.class, R.drawable.ic_tab_patches, args);
 		addTab("Quilts", QuiltsFragment.class, R.drawable.ic_tab_quilts, args);
@@ -74,7 +75,7 @@ public class UnuActivity extends FragmentActivity implements TabHost.OnTabChange
     addTab("Friends", FriendsFragment.class, R.drawable.view_scrap, args);
     
 
-		this.onTabChanged("Inbox");
+		this.onTabChanged("Profile");
 		mTabHost.setOnTabChangedListener(this);
 		
 		
