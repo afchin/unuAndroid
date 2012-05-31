@@ -4,15 +4,14 @@ import java.util.HashMap;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.view.Display;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TabHost;
-import android.widget.TabHost.TabContentFactory;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.Display;
+import android.view.View;
+import android.widget.TabHost;
+import android.widget.TabHost.TabContentFactory;
 
 public class UnuActivity extends FragmentActivity implements TabHost.OnTabChangeListener {
 	private TabHost mTabHost;

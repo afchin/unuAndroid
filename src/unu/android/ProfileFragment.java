@@ -1,9 +1,5 @@
 package unu.android;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
