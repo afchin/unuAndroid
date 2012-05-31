@@ -33,6 +33,15 @@ public abstract class UnuClient extends RestClient {
 	}
 	/** Get inbox ID (GET) */
 	private static final URL inboxIdEndpoint;
+	/** Get a list of current user's friends and friend requests (GET) */
+	private static URL listFriendshipsEndpoint() {
+		try {
+			return new URL(root, "/users/" + userId + "/friendships.json");
+		} catch (MalformedURLException e) {
+			// Should not get here since all of the endpoints are valid URL strings
+			throw new RuntimeException("Invalid endpoints in UnuClient", e);
+		}
+	}
 	
 	/** Initialize all endpoints */
 	static {
@@ -125,5 +134,14 @@ public abstract class UnuClient extends RestClient {
 	
 	public static Basket getBasket() throws AuthenticationException {
 		return new Basket();
+	}
+	
+	public static Friendships getFriendships() throws AuthenticationException {
+		Response response = get(listFriendshipsEndpoint());
+		if (response.getStatusCode() != HttpURLConnection.HTTP_OK) {
+			throw new AuthenticationException();
+		}
+		
+		return new Friendships(response.getContent());
 	}
 }
