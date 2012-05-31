@@ -3,6 +3,9 @@ package unu.rest;
 import org.json.JSONException;
 import org.json.JSONArray;
 
+/**
+ * @author Alexandre Boulgakov
+ */
 public class PatchList {
 	private JSONArray json;
 	

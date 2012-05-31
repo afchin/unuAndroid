@@ -3,6 +3,9 @@ package unu.rest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * @author Alexandre Boulgakov
+ */
 public class Scrap {
 	private JSONObject json;
 	
