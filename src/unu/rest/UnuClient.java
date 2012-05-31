@@ -122,4 +122,8 @@ public abstract class UnuClient extends RestClient {
 		
 		return new Inbox(response.getContent());
 	}
+	
+	public static Basket getBasket() throws AuthenticationException {
+		return new Basket();
+	}
 }

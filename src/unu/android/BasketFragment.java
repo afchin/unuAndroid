@@ -1,22 +1,29 @@
 package unu.android;
 
-import java.util.ArrayList;
+import java.util.List;
 
-import android.app.Activity;
-import android.support.v4.app.Fragment;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.LinearLayout;
+import unu.rest.AuthenticationException;
+import unu.rest.UnuClient;
+import android.content.Intent;
 
+/**
+ * @author Alexandre Boulgakov
+ */
 public class BasketFragment extends ContentViewerFragment {
-  ArrayList<String> embeds = new ArrayList<String>();
-  
-  public BasketFragment(){
-    super();
-    this.addEmbed("<img src = \"http://i.imgur.com/f0nio.gif\" >");
-    this.addEmbed("<img src = \"http://i.imgur.com/NZpzV.jpg\" >");
-  }
+	List<String> embeds;
+
+	public BasketFragment() {
+		super();
+		try {
+			embeds = UnuClient.getBasket().getBodies();
+		} catch (AuthenticationException e) {
+			Intent i = new Intent(this.getActivity().getApplicationContext(),
+					LoginActivity.class);
+			startActivity(i);
+		}
+
+		for (String embed : embeds) {
+			this.addEmbed(embed);
+		}
+	}
 }
