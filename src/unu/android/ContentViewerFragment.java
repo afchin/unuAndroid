@@ -80,7 +80,7 @@ public class ContentViewerFragment extends Fragment {
         webview.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
         webview.setScrollbarFadingEnabled(false);
 
-        webview.loadDataWithBaseURL("http://www.youtube.com", nBody, mimeType, encoding, null);
+        webview.loadDataWithBaseURL("", nBody, mimeType, encoding, null);
 
         views.add(webview);
 
