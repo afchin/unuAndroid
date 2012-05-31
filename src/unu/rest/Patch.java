@@ -10,6 +10,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * @author Alexandre Boulgakov
+ */
 public class Patch extends UnuClient {
 	/** Get scraps in patch (GET) */
 	protected URL patchScrapsEndpoint;
