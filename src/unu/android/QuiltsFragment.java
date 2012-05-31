@@ -28,7 +28,7 @@ public class QuiltsFragment extends GroupListFragment {
     }
 
     // start from 1 to exclude the "Profile"
-    for (int i = 1; i < patchList.length(); i++) {
+    for (int i = 0; i < patchList.length(); i++) {
       this.addGroup(patchList.get(i));
     }
   }
